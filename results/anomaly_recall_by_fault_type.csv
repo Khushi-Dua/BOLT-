@@ -1,0 +1,8 @@
+Detector,spike,dip,drift,flatline,noise
+Residual robust-z (MAD),,,0.15,0.0,0.444
+Residual adaptive rolling,,,0.1,0.333,0.444
+LSTM Autoencoder,,,0.1,0.0,0.0
+Isolation Forest,,,0.0,0.083,0.0
+Local Outlier Factor,,,0.0,0.417,0.0
+One-Class SVM,,,0.0,0.417,0.444
+Consensus ensemble,,,0.05,0.417,0.111

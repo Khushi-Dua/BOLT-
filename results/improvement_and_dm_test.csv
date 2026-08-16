@@ -1,0 +1,12 @@
+Baseline,MAE reduction (%),RMSE reduction (%),MAPE reduction (%),DM statistic,DM p-value,Significant (p<0.05)
+BiLSTM,2.0452,0.4944,2.4792,-1.3135,0.1893,no
+GRU,2.8754,-0.663,4.5706,-2.3737,0.0178,yes
+Random Forest,3.4929,0.8932,4.783,-2.3924,0.0169,yes
+LSTM,5.2288,1.2756,7.1578,-3.5409,0.0004,yes
+CNN-LSTM,7.779,2.7009,10.0752,-5.4461,0.0,yes
+XGBoost,10.3966,4.7492,14.2509,-6.9152,0.0,yes
+Ridge Regression,12.4605,5.08,16.0565,-8.0912,0.0,yes
+"ARIMA(2, 1, 2)",23.27,17.3525,26.9189,-13.7064,0.0,yes
+Naive-1 (persistence),24.379,20.7867,26.9137,-11.8169,0.0,yes
+SVR (RBF),40.3552,34.3506,44.1022,-18.2967,0.0,yes
+Seasonal Naive-24,46.655,44.9372,48.4034,-19.3913,0.0,yes
