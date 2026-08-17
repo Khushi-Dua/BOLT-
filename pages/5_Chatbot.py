@@ -80,13 +80,6 @@ api_key, key_source = _get_api_key()
 
 with st.sidebar:
     st.caption(f"Model: `{MODEL}` (via Groq)")
-    if api_key:
-        masked = f"...{api_key[-4:]}" if len(api_key) > 4 else "(very short — likely wrong)"
-        prefix_ok = api_key.startswith("gsk_")
-        st.caption(
-            f"Key: `{masked}` ({len(api_key)} chars) from {key_source}"
-            + ("" if prefix_ok else " — ⚠️ doesn't start with `gsk_`, wrong key type?")
-        )
     if st.button("Clear chat history"):
         st.session_state["chat_messages"] = []
         st.rerun()
