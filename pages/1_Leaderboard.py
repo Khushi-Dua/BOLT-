@@ -17,6 +17,23 @@ if not fm:
 df = pd.DataFrame(fm).T
 df = df.sort_values("MAE")
 df.insert(0, "Rank", range(1, len(df) + 1))
+
+# --- Plain-language answer to "which model is best", not just a chart ---
+best_model = df.index[0]
+best_row = df.iloc[0]
+runner_up = df.index[1] if len(df) > 1 else None
+runner_row = df.iloc[1] if len(df) > 1 else None
+st.success(
+    f"**Best model: {best_model}** — MAE {best_row['MAE']:.4f}, "
+    f"RMSE {best_row['RMSE']:.4f}, MAPE {best_row['MAPE (%)']:.2f}%, "
+    f"R² {best_row['R2']:.4f}, Accuracy {best_row['Accuracy (%)']:.2f}%"
+    + (
+        f"  \n*(vs. runner-up {runner_up}: MAE {runner_row['MAE']:.4f} — "
+        f"{((runner_row['MAE'] - best_row['MAE']) / runner_row['MAE'] * 100):.1f}% lower error)*"
+        if runner_up is not None else ""
+    )
+)
+
 st.subheader("Forecasting — every model, same test window")
 st.dataframe(
     df.style.format(precision=4).apply(
