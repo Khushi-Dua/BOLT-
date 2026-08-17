@@ -27,6 +27,22 @@ with tab_hist:
         df = preds[["timestamp", "actual", model]].copy()
         df["residual"] = df["actual"] - df[model]
 
+        # --- Exact output parameters for the selected model, not just the graph ---
+        fm = meta.get("forecast_metrics", {})
+        m = fm.get(model, {})
+        if m:
+            is_champion = model == proposed
+            st.markdown(
+                f"**Metrics for {model}**"
+                + ("  🏆 *(champion — lowest MAE overall)*" if is_champion else "")
+            )
+            c1, c2, c3, c4, c5 = st.columns(5)
+            c1.metric("MAE", f"{m.get('MAE', float('nan')):.4f}")
+            c2.metric("RMSE", f"{m.get('RMSE', float('nan')):.4f}")
+            c3.metric("MAPE (%)", f"{m.get('MAPE (%)', float('nan')):.2f}")
+            c4.metric("R²", f"{m.get('R2', float('nan')):.4f}")
+            c5.metric("Accuracy (%)", f"{m.get('Accuracy (%)', float('nan')):.2f}")
+
         c1, c2 = st.columns(2)
         with c1:
             st.markdown(f"**Actual vs {model}**")
@@ -39,6 +55,24 @@ with tab_hist:
         hist_counts = pd.cut(df["residual"], bins=30).value_counts().sort_index()
         hist_counts.index = hist_counts.index.astype(str)  # Altair can't take Interval objects
         st.bar_chart(hist_counts, height=260)
+
+        # --- All models side by side, sorted best-to-worst, so ranking doesn't
+        # rely on reading a chart by eye ---
+        if fm:
+            st.markdown("**All models — same metrics, ranked by MAE**")
+            cmp_df = pd.DataFrame(fm).T.sort_values("MAE")
+            cmp_df.insert(0, "Rank", range(1, len(cmp_df) + 1))
+            st.dataframe(
+                cmp_df.style.format(precision=4).apply(
+                    lambda row: [
+                        "background-color: rgba(46,160,67,0.18)" if row.name == model else ""
+                        for _ in row
+                    ],
+                    axis=1,
+                ),
+                width="stretch",
+            )
+            st.caption(f"Row for **{model}** (your current selection) is highlighted.")
 
 with tab_live:
     st.markdown(
